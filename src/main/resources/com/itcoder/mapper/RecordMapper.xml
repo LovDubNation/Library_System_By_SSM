@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itcoder.mapper.RecordMapper">
+    <resultMap id="recordMap" type="com.itcoder.pojo.Record">
+        <id column="record_id" property="recordId"></id>
+        <result column="record_borrower" property="recordBorrower"></result>
+        <result column="record_bookname" property="recordBookname"></result>
+        <result column="record_bookisbn" property="recordBookisbn"></result>
+        <result column="record_borrowtime" property="recordBorrowtime"></result>
+        <result column="record_remandtime" property="recordRemandtime"></result>
+    </resultMap>
+
+    <!--  Page<Record> getRecords(Record record);  -->
+    <select id="getRecords" parameterType="com.itcoder.pojo.Record" resultMap="recordMap">
+        select * from record
+        <trim prefix="where" suffixOverrides="and">
+            <if test="recordBookname != null">
+                 record_bookname like concat('%',#{recordBookname},'%') and
+            </if>
+            <if test="recordBorrower != null">
+                 record_borrower like concat('%',#{recordBorrower},'%') and
+            </if>
+        </trim>
+    </select>
+
+    <select id="getMyRecords" parameterType="com.itcoder.pojo.Record" resultMap="recordMap">
+        select * from record
+        where record_borrower = #{recordBorrower}
+        <if test="recordBookname != null">
+            and record_bookname = #{recordBookname}
+        </if>
+
+    </select>
+</mapper>
